@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BreezeRun BH — Run Club Bahrain</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #F0FBF8;
+    --bg2:      #E4F7F2;
+    --white:    #FFFFFF;
+    --text:     #0D3B30;
+    --muted:    #3D7A68;
+    --coral:    #FF6B52;
+    --coral2:   #FF8C73;
+    --teal:     #00B49A;
+    --teal2:    #00D4B8;
+    --mint:     #A8EDE4;
+    --sun:      #FFD93D;
+    --sun2:     #FFE878;
+    --sky:      #C8F0F9;
+    --border:   rgba(0,180,154,0.18);
+    --card-bg:  rgba(255,255,255,0.7);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--coral);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.15s ease;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--teal);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 22px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  nav::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(240,251,248,0.97) 60%, transparent);
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    position: relative; z-index: 1;
+  }
+  .nav-logo span { color: var(--coral); }
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+    position: relative; z-index: 1;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--coral); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 48px 80px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 70% 25%, rgba(255,217,61,0.35) 0%, transparent 65%),
+      radial-gradient(ellipse 55% 70% at 10% 80%, rgba(0,180,154,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 90% 85%, rgba(255,107,82,0.15) 0%, transparent 55%),
+      linear-gradient(160deg, #E2F9F4 0%, #FEFAE8 55%, #E8F8FF 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,180,154,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,154,0.07) 1px, transparent 1px);
+    background-size: 80px 80px;
+    animation: gridDrift 22s linear infinite;
+  }
+  @keyframes gridDrift {
+    from { transform: translate(0,0); }
+    to   { transform: translate(80px,80px); }
+  }
+  .orb {
+    position: absolute;
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, rgba(255,217,61,0.35) 0%, transparent 70%);
+    border-radius: 50%;
+    top: 0; right: 5%;
+    animation: orbPulse 7s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes orbPulse {
+    from { transform: scale(1) translate(0,0); opacity: 0.7; }
+    to   { transform: scale(1.15) translate(-20px, 15px); opacity: 1; }
+  }
+  .rings {
+    position: absolute; top: 50%; right: 15%;
+    transform: translate(50%,-50%);
+    pointer-events: none;
+  }
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0,180,154,0.2);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    animation: ringExpand 8s ease-in-out infinite;
+  }
+  .ring:nth-child(1) { width:200px; height:200px; animation-delay:0s; }
+  .ring:nth-child(2) { width:360px; height:360px; animation-delay:1.5s; }
+  .ring:nth-child(3) { width:520px; height:520px; animation-delay:3s; }
+  .ring:nth-child(4) { width:680px; height:680px; animation-delay:4.5s; }
+  @keyframes ringExpand {
+    0%,100% { opacity:0; transform:translate(-50%,-50%) scale(0.95); }
+    50%      { opacity:1; transform:translate(-50%,-50%) scale(1); }
+  }
+
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 20px;
+    position: relative;
+    animation: fadeUp 1s ease both 0.2s;
+  }
+  .hero-eyebrow::before { content: '▸ '; opacity: 0.6; }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px,12vw,160px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    position: relative;
+    animation: fadeUp 1s ease both 0.4s;
+  }
+  .hero-title .line2 {
+    color: var(--teal);
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(64px,10vw,140px);
+    letter-spacing: 0;
+  }
+
+  .hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 60px;
+    position: relative;
+    animation: fadeUp 1s ease both 0.7s;
+  }
+  .hero-desc {
+    max-width: 380px;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+  .hero-cta {
+    display: flex; flex-direction: column;
+    align-items: flex-end; gap: 14px;
+  }
+  .btn-primary {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--coral);
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+    box-shadow: 0 8px 24px rgba(255,107,82,0.3);
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--sun);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .btn-primary:hover { box-shadow: 0 12px 32px rgba(255,107,82,0.4); }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; color: var(--text); }
+  .hero-stat {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.55;
+  }
+
+  .scroll-indicator {
+    position: absolute; bottom: 30px; left: 50%;
+    transform: translateX(-50%);
+    animation: fadeUp 1s ease both 1.2s;
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--teal), transparent);
+    animation: scrollDrop 2s ease-in-out infinite;
+  }
+  @keyframes scrollDrop {
+    0%   { transform: scaleY(0); transform-origin: top; opacity:0; }
+    50%  { transform: scaleY(1); transform-origin: top; opacity:1; }
+    100% { transform: scaleY(0); transform-origin: bottom; opacity:0; }
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--teal);
+    padding: 26px 48px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: 0.05em;
+  }
+  .stat-label {
+    font-size: 0.63rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    margin-top: 4px;
+  }
+  .stat-divider {
+    width: 1px; height: 40px;
+    background: rgba(255,255,255,0.25);
+  }
+
+  /* ABOUT */
+  .about {
+    padding: 130px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background: var(--white);
+  }
+  .about::before {
+    content: 'RUN';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28vw;
+    color: rgba(0,180,154,0.04);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+
+  .section-tag {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-tag::before {
+    content: '';
+    display: block;
+    width: 28px; height: 2px;
+    background: var(--coral);
+    border-radius: 2px;
+  }
+
+  .about-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(34px,4vw,54px);
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+  .about-title em { color: var(--teal); font-style: italic; }
+
+  .about-text {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+
+  .about-card {
+    background: linear-gradient(135deg, #E8FBF7 0%, #FFF9E6 100%);
+    border: 1.5px solid rgba(0,180,154,0.2);
+    border-radius: 8px;
+    padding: 56px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,180,154,0.08);
+  }
+  .about-card::after {
+    content: '';
+    position: absolute; top:-50px; right:-50px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,217,61,0.4), transparent 70%);
+  }
+  .about-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.6rem;
+    letter-spacing: 0.05em;
+    color: var(--teal);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .about-card-sub {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-bottom: 36px;
+  }
+  .about-pillars { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .about-pillars li {
+    font-size: 0.88rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: 0.03em;
+  }
+  .about-pillars li::before {
+    content: '';
+    display: block;
+    width: 7px; height: 7px;
+    background: var(--coral);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* RUNS */
+  .runs {
+    padding: 100px 48px;
+    background: linear-gradient(160deg, var(--bg) 0%, #FFFBEA 100%);
+  }
+  .runs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 56px;
+  }
+  .runs-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px,6vw,80px);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  /* RUN FEATURE CARD */
+  .run-feature-wrap { margin-top: 20px; }
+  .run-feature-card {
+    border: 1.5px solid rgba(0,180,154,0.2);
+    background: var(--white);
+    border-radius: 8px;
+    padding: 64px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,180,154,0.08);
+    transition: box-shadow 0.4s, border-color 0.4s;
+  }
+  .run-feature-card:hover {
+    border-color: rgba(0,180,154,0.4);
+    box-shadow: 0 20px 60px rgba(0,180,154,0.12);
+  }
+  .run-feature-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--teal), var(--coral), var(--sun));
+    border-radius: 0 0 8px 8px;
+  }
+  .run-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: rgba(0,180,154,0.1);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .run-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .run-day {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 18px;
+  }
+  .run-desc {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+  .run-vibes {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-top: 32px;
+  }
+  .vibe-tag {
+    background: rgba(0,180,154,0.08);
+    border: 1.5px solid rgba(0,180,154,0.2);
+    border-radius: 20px;
+    padding: 7px 18px;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--teal);
+  }
+
+  /* DISTANCE WHEEL */
+  .distance-wheel {
+    background: linear-gradient(135deg, #E6FBF7, #FFF9E3);
+    border: 1.5px solid rgba(0,180,154,0.25);
+    border-radius: 8px;
+    padding: 44px 36px;
+    text-align: center;
+    min-width: 190px;
+    box-shadow: 0 8px 24px rgba(0,180,154,0.1);
+  }
+  .wheel-label {
+    font-size: 0.63rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-bottom: 18px;
+  }
+  .wheel-nums {
+    display: flex; flex-direction: column;
+    gap: 3px; margin-bottom: 10px;
+  }
+  .wn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: rgba(0,180,154,0.2);
+    line-height: 1;
+    transition: all 0.35s;
+  }
+  .wn.active {
+    font-size: 3.8rem;
+    color: var(--teal);
+  }
+  .wheel-unit {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    opacity: 0.5;
+    margin-bottom: 18px;
+  }
+  .wheel-note {
+    font-size: 0.7rem;
+    color: var(--muted);
+    opacity: 0.55;
+    line-height: 1.6;
+    max-width: 150px;
+    margin: 0 auto;
+  }
+
+  /* GALLERY STRIP */
+  .gallery-strip {
+    padding: 40px 0;
+    overflow: hidden;
+    position: relative;
+    background: var(--white);
+  }
+  .gallery-strip::before,
+  .gallery-strip::after {
+    content: ''; position: absolute;
+    top: 0; bottom: 0; width: 100px; z-index: 2;
+  }
+  .gallery-strip::before { left: 0; background: linear-gradient(to right, var(--white), transparent); }
+  .gallery-strip::after  { right: 0; background: linear-gradient(to left, var(--white), transparent); }
+  .gallery-track {
+    display: flex; gap: 14px;
+    animation: marquee 28s linear infinite;
+    width: max-content;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .gallery-item {
+    width: 220px; height: 148px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(0,180,154,0.1), rgba(168,237,228,0.2));
+    border: 1px solid rgba(0,180,154,0.15);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    color: rgba(0,180,154,0.45);
+  }
+  .gallery-item::before { content: attr(data-label); }
+  .gallery-item:nth-child(even) {
+    background: linear-gradient(135deg, rgba(255,217,61,0.12), rgba(255,232,120,0.15));
+    border-color: rgba(255,184,48,0.2);
+    color: rgba(180,130,0,0.45);
+  }
+  .gallery-item:nth-child(3n) {
+    background: linear-gradient(135deg, rgba(255,107,82,0.08), rgba(255,140,115,0.12));
+    border-color: rgba(255,107,82,0.15);
+    color: rgba(200,60,40,0.4);
+  }
+
+  /* COMMUNITY */
+  .community {
+    padding: 130px 48px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: center;
+    background: var(--bg);
+  }
+  .community-visual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+  .comm-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 36px 28px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: box-shadow 0.3s, border-color 0.3s;
+    box-shadow: 0 4px 16px rgba(0,180,154,0.06);
+  }
+  .comm-card:hover {
+    border-color: var(--teal);
+    box-shadow: 0 8px 28px rgba(0,180,154,0.12);
+  }
+  .comm-card.tall {
+    grid-row: span 2;
+    background: linear-gradient(160deg, #D6F7F1 0%, #FFF9E0 100%);
+    justify-content: flex-end;
+    min-height: 260px;
+    border-color: rgba(0,180,154,0.25);
+  }
+  .comm-icon { font-size: 1.8rem; margin-bottom: 6px; }
+  .comm-title { font-family: 'Instrument Serif', serif; font-size: 1.1rem; color: var(--text); }
+  .comm-text { font-size: 0.8rem; line-height: 1.65; color: var(--muted); }
+  .comm-big-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.4rem; color: var(--teal); line-height: 1;
+  }
+
+  /* INSTAGRAM */
+  .instagram {
+    padding: 100px 48px;
+    text-align: center;
+    background: var(--white);
+  }
+  .ig-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px,7vw,88px);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .ig-handle {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    color: var(--coral);
+    font-size: 1.2rem;
+    margin-bottom: 44px;
+    display: block;
+  }
+  .ig-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    max-width: 860px;
+    margin: 0 auto 44px;
+  }
+  .ig-placeholder {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, rgba(0,180,154,0.07), rgba(168,237,228,0.12));
+    border: 1px solid rgba(0,180,154,0.12);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.63rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(0,180,154,0.4);
+    transition: all 0.3s; cursor: none;
+  }
+  .ig-placeholder:hover {
+    background: rgba(0,180,154,0.1);
+    border-color: rgba(0,180,154,0.3);
+  }
+  .ig-placeholder:nth-child(3n) {
+    background: linear-gradient(135deg, rgba(255,217,61,0.1), rgba(255,232,120,0.12));
+    border-color: rgba(255,184,48,0.18);
+    color: rgba(160,115,0,0.4);
+  }
+  .ig-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    border: 1.5px solid var(--coral);
+    border-radius: 4px;
+    padding: 14px 36px;
+    color: var(--coral);
+    text-decoration: none;
+    font-size: 0.76rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .ig-btn:hover { background: var(--coral); color: var(--white); }
+
+  /* FORM SECTION */
+  .testimonials {
+    padding: 120px 48px;
+    background: linear-gradient(160deg, #F0FBF8 0%, #FFFBEA 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .testimonials::before {
+    content: '"';
+    position: absolute;
+    font-family: 'Instrument Serif', serif;
+    font-size: 28vw;
+    color: rgba(0,180,154,0.05);
+    top: -2%; left: -1%;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .testimonials-header { margin-bottom: 60px; }
+
+  .form-wrap { max-width: 680px; margin: 0 auto; }
+  .form-card { display: flex; flex-direction: column; gap: 28px; }
+  .form-group { display: flex; flex-direction: column; gap: 10px; }
+  .form-label {
+    font-size: 0.71rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .form-input {
+    background: var(--white);
+    border: 1.5px solid rgba(0,180,154,0.2);
+    border-radius: 6px;
+    padding: 15px 18px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%; appearance: none;
+    box-shadow: 0 2px 8px rgba(0,180,154,0.05);
+  }
+  .form-input::placeholder { color: rgba(61,122,104,0.35); }
+  .form-input:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(0,180,154,0.1);
+  }
+  .form-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300B49A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-color: var(--white);
+    padding-right: 44px;
+  }
+  .form-select option { background: var(--white); color: var(--text); }
+  .form-textarea { resize: vertical; min-height: 108px; line-height: 1.7; }
+  .form-submit {
+    align-self: flex-start;
+    padding: 15px 44px;
+    background: var(--teal);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 20px rgba(0,180,154,0.3);
+  }
+  .form-submit:hover { background: var(--coral); box-shadow: 0 8px 24px rgba(255,107,82,0.35); }
+  .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .form-success {
+    text-align: center;
+    padding: 80px 40px;
+    border: 1.5px solid rgba(0,180,154,0.25);
+    border-radius: 8px;
+    background: linear-gradient(135deg, #E8FBF7, #FFF9E3);
+    box-shadow: 0 12px 40px rgba(0,180,154,0.1);
+  }
+  .success-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--teal);
+    color: var(--teal);
+    font-size: 1.8rem;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    background: rgba(0,180,154,0.08);
+  }
+  .success-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; letter-spacing: 0.05em;
+    color: var(--text); margin-bottom: 14px;
+  }
+  .success-text {
+    font-size: 1rem; color: var(--muted); line-height: 1.8;
+    max-width: 400px; margin: 0 auto 12px;
+  }
+  .success-sub { font-size: 0.9rem; color: var(--coral); }
+
+  /* JOIN */
+  .join {
+    padding: 130px 48px;
+    position: relative; overflow: hidden;
+    text-align: center;
+    background: var(--teal);
+  }
+  .join::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 70% at 50% 50%, rgba(255,217,61,0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 10% 90%, rgba(255,107,82,0.2) 0%, transparent 60%);
+  }
+  .join-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px,9vw,118px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .join-title span { color: var(--sun); display: block; }
+  .join-text {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.8;
+    max-width: 480px;
+    margin: 0 auto 52px;
+    position: relative;
+  }
+  .join-actions {
+    display: flex; gap: 18px;
+    justify-content: center;
+    position: relative;
+  }
+  .btn-join-primary {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--white);
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.3s;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+  .btn-join-primary:hover { background: var(--sun); color: var(--text); }
+  .btn-join-outline {
+    display: inline-block;
+    padding: 16px 40px;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    transition: all 0.3s;
+  }
+  .btn-join-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(0,180,154,0.12);
+    background: var(--white);
+    padding: 36px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.1em; color: var(--teal); }
+  .footer-logo span { color: var(--coral); }
+  .footer-text { font-size: 0.7rem; letter-spacing: 0.1em; color: var(--muted); opacity: 0.5; }
+  .footer-ig { font-size: 0.7rem; letter-spacing: 0.1em; color: var(--coral); text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
+  .footer-ig:hover { opacity: 1; }
+
+  /* SPONSORS */
+  .sponsors {
+    padding: 100px 48px;
+    background: var(--white);
+    text-align: center;
+    overflow: hidden;
+  }
+  .sponsors-header { margin-bottom: 64px; }
+  .sponsors-intro {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 16px auto 0;
+    opacity: 0.8;
+  }
+  .sponsors-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 1100px;
+    margin: 0 auto 20px;
+  }
+  .sponsor-card {
+    background: linear-gradient(135deg, #F4FCF9 0%, #FEFCE8 100%);
+    border: 1.5px solid rgba(0,180,154,0.15);
+    border-radius: 12px;
+    padding: 32px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.35s ease;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .sponsor-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,180,154,0.06), rgba(255,217,61,0.06));
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+  .sponsor-card:hover {
+    border-color: var(--teal);
+    box-shadow: 0 12px 36px rgba(0,180,154,0.14);
+    transform: translateY(-4px);
+  }
+  .sponsor-card:hover::before { opacity: 1; }
+  .sponsor-logo-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 14px;
+    background: var(--white);
+    border: 1px solid rgba(0,180,154,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    position: relative;
+    z-index: 1;
+  }
+  .sponsor-logo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+  }
+  .sponsor-emoji {
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .sponsor-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.3;
+    position: relative;
+    z-index: 1;
+  }
+  .sponsor-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    opacity: 0.7;
+    position: relative;
+    z-index: 1;
+  }
+  .sponsors-more {
+    margin-top: 32px;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(30px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 18px 22px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 22px 56px; }
+    .hero-bottom { flex-direction: column; align-items: flex-start; gap: 28px; }
+    .stats-bar { padding: 18px 22px; flex-wrap: wrap; gap: 14px; }
+    .about { grid-template-columns: 1fr; padding: 80px 22px; gap: 50px; }
+    .runs { padding: 80px 22px; }
+    .runs-header { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .run-feature-card { grid-template-columns: 1fr; padding: 36px 24px; gap: 36px; }
+    .community { grid-template-columns: 1fr; padding: 80px 22px; gap: 50px; }
+    .community-visual { order: -1; }
+    .instagram { padding: 80px 22px; }
+    .ig-grid { grid-template-columns: repeat(2, 1fr); }
+    .testimonials { padding: 80px 22px; }
+    .sponsors { padding: 80px 22px; }
+    .sponsors-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .join { padding: 100px 22px; }
+    .join-actions { flex-direction: column; align-items: center; }
+    footer { flex-direction: column; gap: 14px; text-align: center; padding: 28px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">Breeze<span>Run</span> BH</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#runs">Our Run</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="#sponsors">Partners</a></li>
+    <li><a href="#testimonials">Share Your Story</a></li>
+    <li><a href="#join">Join Us</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="orb"></div>
+  <div class="rings">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+  </div>
+
+  <p class="hero-eyebrow">Bahrain's Run Community</p>
+  <h1 class="hero-title">
+    Breeze<br>
+    <span class="line2">Run BH</span>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      Where the desert meets the sea and every stride is a shared breath.
+      We run together under Bahrain's open skies — for community, for joy, for the pure love of movement.
+    </p>
+    <div class="hero-cta">
+      <a href="#join" class="btn-primary"><span>Join the Pack →</span></a>
+      <span class="hero-stat">Every km counts. Every runner matters.</span>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">Sat</div>
+    <div class="stat-label">Every Week</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">🇧🇭</div>
+    <div class="stat-label">Based in Bahrain</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">Easy</div>
+    <div class="stat-label">Always Social Pace</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">∞</div>
+    <div class="stat-label">Good Vibes</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-content reveal">
+    <p class="section-tag">Who We Are</p>
+    <h2 class="about-title">Running is better <em>together</em></h2>
+    <p class="about-text">
+      BreezeRun BH was born from a simple belief: that running shouldn't be a solo sport. We're a community of runners at every level — beginners finding their first rhythm, seasoned athletes chasing new records, and everyone in between.
+    </p>
+    <p class="about-text">
+      Based in the Kingdom of Bahrain, we bring people together through shared movement, shared miles, and the kind of friendships that only happen when you've pushed through something hard side by side.
+    </p>
+  </div>
+  <div class="about-visual reveal">
+    <div class="about-card">
+      <div class="about-card-title">Run.<br>Breathe.<br>Belong.</div>
+      <div class="about-card-sub">The BreezeRun Way</div>
+      <ul class="about-pillars">
+        <li>Inclusive — every pace, every person</li>
+        <li>Community-first culture</li>
+        <li>Safe, guided routes across Bahrain</li>
+        <li>Post-run socials &amp; connections</li>
+        <li>Race training &amp; goal support</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- RUNS -->
+<section class="runs" id="runs">
+  <div class="runs-header reveal">
+    <div>
+      <p class="section-tag">What We Do</p>
+      <h2 class="runs-title">Our<br>Run</h2>
+    </div>
+    <p style="max-width:300px; font-size:0.87rem; color:var(--muted); line-height:1.75; opacity:0.8;">
+      We keep it simple — one weekly run, every Saturday (and sometimes Friday too). No pressure, no pace requirements. Just show up.
+    </p>
+  </div>
+
+  <div class="run-feature-wrap reveal">
+    <div class="run-feature-card">
+      <div class="run-feature-left">
+        <div class="run-num" style="font-size:8rem; color:rgba(0,180,154,0.1); line-height:1;">SAT</div>
+        <h3 class="run-name" style="font-size:2.2rem; margin-bottom:10px;">The Weekly Breeze</h3>
+        <p class="run-day" style="margin-bottom:22px;">Every Saturday · Sometimes Fridays too</p>
+        <p class="run-desc" style="font-size:0.95rem; line-height:1.85; max-width:460px;">
+          Our weekly run is the heart of BreezeRun BH. The pace is always easy and conversational — we run together, not against each other. This isn't a race, it's a gathering. We talk, laugh, explore, and move as one crew.
+        </p>
+        <div class="run-vibes">
+          <div class="vibe-tag">🌅 Social Pace</div>
+          <div class="vibe-tag">🤝 All Levels</div>
+          <div class="vibe-tag">😌 Zero Pressure</div>
+          <div class="vibe-tag">📍 Bahrain Routes</div>
+        </div>
+      </div>
+      <div class="run-feature-right">
+        <div class="distance-wheel">
+          <div class="wheel-label">Distance</div>
+          <div class="wheel-nums">
+            <span class="wn active">3</span>
+            <span class="wn">5</span>
+            <span class="wn">6</span>
+            <span class="wn">10</span>
+            <span class="wn">12</span>
+          </div>
+          <div class="wheel-unit">km</div>
+          <p class="wheel-note">Varies every week — always announced ahead of time on Instagram.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY STRIP -->
+<div class="gallery-strip">
+  <div class="gallery-track">
+    <div class="gallery-item" data-label="Race Day"></div>
+    <div class="gallery-item" data-label="Sunrise Run"></div>
+    <div class="gallery-item" data-label="Group Finish"></div>
+    <div class="gallery-item" data-label="Post-Run"></div>
+    <div class="gallery-item" data-label="Saturday Vibes"></div>
+    <div class="gallery-item" data-label="Long Run"></div>
+    <div class="gallery-item" data-label="Community"></div>
+    <div class="gallery-item" data-label="Bahrain Routes"></div>
+    <div class="gallery-item" data-label="Race Day"></div>
+    <div class="gallery-item" data-label="Sunrise Run"></div>
+    <div class="gallery-item" data-label="Group Finish"></div>
+    <div class="gallery-item" data-label="Post-Run"></div>
+    <div class="gallery-item" data-label="Saturday Vibes"></div>
+    <div class="gallery-item" data-label="Long Run"></div>
+    <div class="gallery-item" data-label="Community"></div>
+    <div class="gallery-item" data-label="Bahrain Routes"></div>
+  </div>
+</div>
+
+<!-- COMMUNITY -->
+<section class="community" id="community">
+  <div class="community-visual reveal">
+    <div class="comm-card tall">
+      <div class="comm-big-num">100+</div>
+      <h3 class="comm-title">Active Members</h3>
+      <p class="comm-text">Runners from every background, united by the love of movement and Bahrain's beautiful routes.</p>
+    </div>
+    <div class="comm-card">
+      <div class="comm-icon">🌅</div>
+      <h3 class="comm-title">Golden Hours</h3>
+      <p class="comm-text">We run at the best times — when Bahrain's skies are at their most beautiful.</p>
+    </div>
+    <div class="comm-card">
+      <div class="comm-icon">🏅</div>
+      <h3 class="comm-title">Race Ready</h3>
+      <p class="comm-text">We support members training for local and international races as a team.</p>
+    </div>
+  </div>
+
+  <div class="community-text reveal">
+    <p class="section-tag">Community</p>
+    <h2 class="about-title">More than <em>a run club</em></h2>
+    <p class="about-text">
+      When you join BreezeRun BH, you're not just signing up for a workout. You're joining a family that shows up — for early mornings, for race days, for the days when motivation is low but company makes all the difference.
+    </p>
+    <p class="about-text">
+      Follow along on Instagram to see where we've been running, who's hit their goals, and what's coming next.
+    </p>
+    <a href="https://www.instagram.com/breezerunbh" target="_blank" class="ig-btn" style="margin-top:24px; display:inline-flex;">
+      ↗ Follow @breezerunbh
+    </a>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section class="instagram">
+  <h2 class="ig-title reveal">On the 'Gram</h2>
+  <span class="ig-handle reveal">@breezerunbh</span>
+  <div class="ig-grid reveal">
+    <div class="ig-placeholder">Run</div>
+    <div class="ig-placeholder">Race</div>
+    <div class="ig-placeholder">Community</div>
+    <div class="ig-placeholder">Sunrise</div>
+    <div class="ig-placeholder">Saturday</div>
+    <div class="ig-placeholder">Long Run</div>
+    <div class="ig-placeholder">Finish</div>
+    <div class="ig-placeholder">Bahrain</div>
+  </div>
+  <a href="https://www.instagram.com/breezerunbh" target="_blank" class="ig-btn reveal">
+    View all posts on Instagram ↗
+  </a>
+</section>
+
+<!-- COMMUNITY FORM -->
+<section class="testimonials" id="testimonials">
+  <div class="testimonials-header reveal">
+    <p class="section-tag">Share Your Story</p>
+    <h2 class="runs-title" style="font-size: clamp(40px,5vw,70px); color:var(--text);">We'd Love to<br>Hear From You</h2>
+    <p style="margin-top:18px; font-size:0.95rem; color:var(--muted); max-width:480px; line-height:1.8; opacity:0.85;">
+      Tell us a bit about yourself, how you found BreezeRun, and what you'd love to see from our community.
+    </p>
+  </div>
+
+  <div class="form-wrap reveal">
+    <div class="form-card" id="formCard">
+      <div class="form-group">
+        <label class="form-label" for="f-name">Your Name</label>
+        <input class="form-input" type="text" id="f-name" placeholder="e.g. Mohsen Haji" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-heard">How did you hear about BreezeRun BH?</label>
+        <select class="form-input form-select" id="f-heard">
+          <option value="" disabled selected>Select one…</option>
+          <option>Instagram</option>
+          <option>A friend or family member</option>
+          <option>WhatsApp group</option>
+          <option>Saw us on a run</option>
+          <option>Word of mouth</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-experience">Something you love about BreezeRun <span style="opacity:0.45">(optional)</span></label>
+        <textarea class="form-input form-textarea" id="f-experience" placeholder="Tell us what keeps you coming back…"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-wish">What would you love to add or see in BreezeRun?</label>
+        <textarea class="form-input form-textarea" id="f-wish" placeholder="e.g. post-run coffee, route maps, a Friday run…"></textarea>
+      </div>
+      <button class="form-submit" id="formSubmit" onclick="handleSubmit()">
+        <span id="submitText">Submit →</span>
+      </button>
+    </div>
+
+    <div class="form-success" id="formSuccess" style="display:none;">
+      <div class="success-icon">✓</div>
+      <h3 class="success-title">Thank you!</h3>
+      <p class="success-text">We got your message. We read every single one — your feedback shapes what BreezeRun becomes next.</p>
+      <p class="success-sub">See you on Saturday. 🏃</p>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSORS -->
+<section class="sponsors" id="sponsors">
+  <div class="sponsors-header reveal">
+    <p class="section-tag" style="justify-content:center;">Our Partners</p>
+    <h2 class="runs-title" style="font-size:clamp(40px,5vw,72px);">Proud to Run<br>With These Names</h2>
+    <p class="sponsors-intro">
+      BreezeRun BH has been supported by some of Bahrain's most loved brands and venues. Every collab has helped us grow our community and create unforgettable run experiences.
+    </p>
+  </div>
+
+  <div class="sponsors-grid reveal">
+
+    <div class="sponsor-card">
+      <div class="sponsor-logo-wrap">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Lavazza_logo.svg/320px-Lavazza_logo.svg.png" alt="Lavazza" onerror="this.style.display='none'; this.parentNode.innerHTML='☕';" />
+      </div>
+      <div class="sponsor-name">Lavazza Bahrain</div>
+      <div class="sponsor-tag">Coffee Sponsor</div>
+    </div>
+
+    <div class="sponsor-card">
+      <div class="sponsor-logo-wrap">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Lululemon_Athletica_logo.svg/320px-Lululemon_Athletica_logo.svg.png" alt="lululemon" onerror="this.style.display='none'; this.parentNode.innerHTML='🏃';" />
+      </div>
+      <div class="sponsor-name">lululemon Bahrain</div>
+      <div class="sponsor-tag">Activewear Sponsor</div>
+    </div>
+
+    <div class="sponsor-card">
+      <div class="sponsor-logo-wrap">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Hilton_Hotels_%26_Resorts_logo.svg/320px-Hilton_Hotels_%26_Resorts_logo.svg.png" alt="Hilton" onerror="this.style.display='none'; this.parentNode.innerHTML='🏨';" />
+      </div>
+      <div class="sponsor-name">Hilton Hotel Bahrain</div>
+      <div class="sponsor-tag">Hospitality Partner</div>
+    </div>
+
+    <div class="sponsor-card">
+      <div class="sponsor-logo-wrap" style="background:linear-gradient(135deg,#0057A8,#003D7A);">
+        <span style="color:white;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.06em;padding:4px;">CITY CENTRE</span>
+      </div>
+      <div class="sponsor-name">City Centre Bahrain</div>
+      <div class="sponsor-tag">Venue Partner</div>
+    </div>
+
+    <div class="sponsor-card">
+      <div class="sponsor-logo-wrap" style="background:linear-gradient(135deg,#1A3A2A,#2D6B4A);">
+        <span class="sponsor-emoji">🌿</span>
+      </div>
+      <div class="sponsor-name">Mine Café Bahrain</div>
+      <div class="sponsor-tag">Café Sponsor</div>
+    </div>
+
+    <div class="sponsor-card">
+      <div class="sponsor-logo-wrap" style="background:linear-gradient(135deg,#D4A96A,#8B6B3D);">
+        <span class="sponsor-emoji">🏛️</span>
+      </div>
+      <div class="sponsor-name">Marassi Bahrain</div>
+      <div class="sponsor-tag">Lifestyle Partner</div>
+    </div>
+
+    <div class="sponsor-card">
+      <div class="sponsor-logo-wrap" style="background:linear-gradient(135deg,#006994,#003F5C);">
+        <span class="sponsor-emoji">🌊</span>
+      </div>
+      <div class="sponsor-name">Beach Culture Bahrain</div>
+      <div class="sponsor-tag">Lifestyle Sponsor</div>
+    </div>
+
+    <div class="sponsor-card">
+      <div class="sponsor-logo-wrap" style="background:linear-gradient(135deg,#4CAF50,#2E7D32);">
+        <span class="sponsor-emoji">🌴</span>
+      </div>
+      <div class="sponsor-name">Palms Café</div>
+      <div class="sponsor-tag">Café Partner</div>
+    </div>
+
+    <div class="sponsor-card">
+      <div class="sponsor-logo-wrap" style="background:linear-gradient(135deg,#E63946,#C1121F);">
+        <span class="sponsor-emoji">💧</span>
+      </div>
+      <div class="sponsor-name">Revive Bahrain</div>
+      <div class="sponsor-tag">Hydration Sponsor</div>
+    </div>
+
+  </div>
+
+  <p class="sponsors-more reveal">& many more amazing partners along the way</p>
+</section>
+
+<!-- JOIN -->
+<section class="join" id="join">
+  <h2 class="join-title reveal">
+    Ready to
+    <span>Run With Us?</span>
+  </h2>
+  <p class="join-text reveal">
+    No time trials. No minimum fitness level. Just show up, and we'll take it from there together.
+  </p>
+  <div class="join-actions reveal">
+    <a href="https://www.instagram.com/breezerunbh" target="_blank" class="btn-join-primary">
+      Follow Us on Instagram →
+    </a>
+    <a href="#runs" class="btn-join-outline">See Our Run</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Breeze<span>Run</span> BH</div>
+  <p class="footer-text">Kingdom of Bahrain · Running Together Since Day One</p>
+  <a href="https://www.instagram.com/breezerunbh" target="_blank" class="footer-ig">@breezerunbh</a>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX - 6 + 'px';
+    cursor.style.top  = mouseY - 6 + 'px';
+  });
+  function animateRing() {
+    ringX += (mouseX - ringX - 18) * 0.12;
+    ringY += (mouseY - ringY - 18) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Formspree — replace YOUR_FORM_ID with your actual ID from formspree.io
+  const FORMSPREE_ID = 'YOUR_FORM_ID';
+  async function handleSubmit() {
+    const name       = document.getElementById('f-name').value.trim();
+    const heard      = document.getElementById('f-heard').value;
+    const experience = document.getElementById('f-experience').value.trim();
+    const wish       = document.getElementById('f-wish').value.trim();
+    if (!name || !heard || !wish) {
+      alert("Please fill in your name, how you heard about us, and what you'd love to see.");
+      return;
+    }
+    const btn = document.getElementById('formSubmit');
+    btn.disabled = true;
+    document.getElementById('submitText').textContent = 'Sending…';
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name, heard, experience, wish })
+      });
+      if (res.ok) { showSuccess(); } else { throw new Error(); }
+    } catch { showSuccess(); }
+  }
+  function showSuccess() {
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  // Distance wheel cycling
+  const nums = document.querySelectorAll('.wn');
+  let current = 0;
+  setInterval(() => {
+    nums[current].classList.remove('active');
+    current = (current + 1) % nums.length;
+    nums[current].classList.add('active');
+  }, 1400);
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
